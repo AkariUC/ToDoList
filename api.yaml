@@ -1,0 +1,346 @@
+openapi: 3.0.2
+info:
+  title: ToDo List
+  description: |-
+    <b>ToDo List 仕様書</b>
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/
+tags:
+  - name: user
+    description: ユーザ関連API
+  - name: todo
+    description: ToDo関連API
+paths:
+  /user/signin:
+    post:
+      tags:
+        - user
+      summary: サインインAPI
+      description: |
+        ユーザを作成します。<br>
+        ユーザの名前とパスワードをリクエストします.<br>
+        認証用のトークンを生成してデータベースへ保存されます。<br>
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSigninRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSigninResponse"
+      x-codegen-request-body-name: body
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: ログインAPI
+      description: |
+        ログインします。<br>
+        サインインで登録してある、ユーザの名前とパスワードをリクエストで受け取ります．<br>
+        紐付いているトークンを取得します。
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLoginRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLoginResponse"
+      x-codegen-request-body-name: body
+  /user/change:
+    post:
+      tags:
+        - user
+      summary: ユーザ情報更新API
+      description: |
+        ユーザの情報の更新を行います。<br>
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserChangeRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+      x-codegen-request-body-name: body
+  /user/delete:
+    post:
+      tags:
+        - user
+      summary: ユーザ情報削除API
+      description: |
+        ユーザの情報の削除を行います。<br>
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDeleteRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+      x-codegen-request-body-name: body
+  /todo/add:
+    post:
+      tags:
+        - todo
+      summary: ToDoの新規作成API
+      description: |
+        内容，期限日，タグ，トークンをリクエストします。<br>
+      parameters:
+        - name: x-token
+          in: header
+          description: トークン
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoAddRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+      x-codegen-request-body-name: body
+  /todo/list:
+    post:
+      tags:
+        - todo
+      summary: ToDoリスト取得API
+      description: |
+        登録したToDoリストの一覧を取得します。<br>
+      parameters:
+        - name: x-token
+          in: header
+          description: 認証トークン
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoListResponse"
+      x-codegen-request-body-name: body
+  /todo/search:
+    post:
+      tags:
+        - todo
+      summary: ToDo検索API
+      description: |
+        登録したToDoリストの中から，ユーザが指定したタグがついている物のみを取得します。<br>
+      parameters:
+        - name: x-token
+          in: header
+          description: 認証トークン
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoSearchRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodoSearchResponse"
+      x-codegen-request-body-name: body
+  /todo/delete:
+    post:
+      tags:
+        - todo
+      summary: ToDoデータ削除API
+      description: |
+        登録したToDoデータを削除します．<br>
+        todo_extanceを更新します．
+      parameters:
+        - name: x-token
+          in: header
+          description: 認証トークン
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoDeleteRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+      x-codegen-request-body-name: body
+  /todo/complete:
+    post:
+      tags:
+        - todo
+      summary: ToDo完了API
+      description: |
+        登録したToDoデータが完了しているかしていないかを更新します．<br>
+        todo_completeを更新します．
+      parameters:
+        - name: x-token
+          in: header
+          description: 認証トークン
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TodoCompleteRequest"
+        required: true
+      responses:
+        200:
+          description: A successful response.
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    UserSigninRequest:
+      type: object
+      properties:
+        user_name:
+          type: string
+          description: ユーザ名
+        password:
+          type: string
+          description: パスワード
+    UserSigninResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: トークン
+    UserLoginRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ユーザ名
+        password:
+          type: string
+          description: パスワード
+    UserLoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: トークン
+    UserChangeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ユーザ名
+        password:
+          type: string
+          description: パスワード
+    UserDeleteRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: ユーザ名
+        password:
+          type: string
+          description: パスワード
+    TodoAddRequest:
+      type: object
+      properties:
+        todo_article:
+          type: string
+          description: 内容
+        todo_limit:
+          type: string
+          description: 期限日
+        todo_tag_id:
+          type: integer
+          description: タグ
+    TodoListResponse:
+      type: object
+      properties:
+        todo_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/TodoList'
+          description: ToDoリスト一覧
+    TodoList:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ToDoデータのid
+        todo_article:
+          type: string
+          description: 内容
+        todo_limit:
+          type: string
+          description: 期限日
+        todo_tag_id:
+          type: integer
+          description: タグ
+        todo_complete:
+          type: integer
+          description: 完了しているかしていないか判定
+        todo_extance:
+          type: integer
+          description: 削除しているかしていないか判定
+    TodoSearchRequest:
+      type: object
+      properties:
+        todo_tag_id:
+          type: integer
+          description: タグ
+    TodoSearchResponse:
+      type: object
+      properties:
+        todo_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/TodoList'
+          description: ToDoリストの検索結果
+    TodoDeleteRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ToDoデータのid
+    TodoCompleteRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ToDoデータのid
+    
+    
+    
