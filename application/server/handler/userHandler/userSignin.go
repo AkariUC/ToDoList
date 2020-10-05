@@ -1,10 +1,14 @@
 package userHandler
 
 import (
-	"ToDoList/application/server/response"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/google/uuid"
+
+	"ToDoList/application/server/response"
+	"ToDoList/domain/model/userModel"
 )
 
 type UserSigninRequest struct {
@@ -37,7 +41,6 @@ func HandleUserSignin() http.HandlerFunc {
 			Name:      requestBody.Name,
 			PassWord:  requestBody.PassWord,
 			AuthToken: authToken.String(),
-			Coin:      0,
 		})
 		if err != nil {
 			log.Println(err)
