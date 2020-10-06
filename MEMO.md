@@ -31,3 +31,7 @@ https://qiita.com/hmarf/items/7f4d39c48775c205b99b
 
 ### goimports
 [goimportsを使ってIntelliJ IDEA でGoのコードのimportを手軽に整理する](https://qiita.com/dmnlk/items/c423d5853cc129ab77a4)
+
+
+## 個人的なメモ(もり)
+[MySQLのrootパスワードを忘れた時のリセット方法](https://qiita.com/miriwo/items/1880e9d2ebcfd3c0e60d)
