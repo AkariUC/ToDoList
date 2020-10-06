@@ -229,7 +229,7 @@ components:
     UserSigninRequest:
       type: object
       properties:
-        user_name:
+        name:
           type: string
           description: ユーザ名
         password:
