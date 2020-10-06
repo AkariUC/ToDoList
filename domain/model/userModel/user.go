@@ -22,3 +22,7 @@ func InsertUser(record *User) error {
 	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken, record.Coin)
 	return err
 }
+
+// todo ログイン時にユーザから送られてきたデータをもとに、DBのユーザを探し、トークンを返す
+
+// todo 変換

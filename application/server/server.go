@@ -12,9 +12,7 @@ import (
 func Serve(addr string) {
 
 	http.HandleFunc("/user/signin", post(userHandler.HandleUserSignin()))
-	//http.HandleFunc("/user/login", post(userHandler.HandleUserLogin()))
-	//http.HandleFunc("/game/finish", post(gameHandler.HandleGameFinish()))
-	//http.HandleFunc("/ranking/list", post(rankingHandler.HandleRankingList()))
+	// todo Loginハンドラを呼び出す(スワッガーを参考に)
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
