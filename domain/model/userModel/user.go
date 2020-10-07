@@ -1,11 +1,12 @@
 package userModel
 
 import (
-	"ToDoList/infrastructure/db"
 	"database/sql"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
+
+	"ToDoList/infrastructure/db"
 )
 
 type User struct {
