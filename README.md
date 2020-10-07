@@ -66,11 +66,11 @@ CREATE TABLE IF NOT EXISTS `todo_db`.`todo`
     `todo_complete`  INT                NOT NULL COMMENT '終了したかどうか',
     `todo_existence` INT                NOT NULL COMMENT '削除したかどうか',
     PRIMARY KEY (`id`),
-    FOREIGN KEY('todo_user_id')  REFERENCES user('id') ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY('todo_tag_id') REFERENCES tag('id')  ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(`todo_user_id`) REFERENCES user(`id`) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(`todo_tag_id`) REFERENCES tag(`id`) ON UPDATE CASCADE ON DELETE CASCADE
 )
 ENGINE = InnoDB
-COMMENT = 'ToDo List';
+COMMENT = 'ToDoList';
 
 
 CREATE TABLE IF NOT EXISTS `todo_db`.`tag`
