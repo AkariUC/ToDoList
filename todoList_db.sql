@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS todo_db;
+USE `todo_db` ;
 
 CREATE TABLE IF NOT EXISTS `todo_db`.`user`
 (

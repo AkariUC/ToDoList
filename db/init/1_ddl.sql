@@ -8,82 +8,58 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema dojo_api
+-- Schema todo_db
 -- -----------------------------------------------------
+CREATE DATABASE IF NOT EXISTS todo_db;
+USE `todo_db` ;
 
 -- -----------------------------------------------------
--- Schema dojo_api
+-- Table user
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `dojo_api` DEFAULT CHARACTER SET utf8mb4 ;
-USE `dojo_api` ;
-
-SET CHARSET utf8mb4;
-
--- -----------------------------------------------------
--- Table `dojo_api`.`user`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dojo_api`.`user` (
-  `id` VARCHAR(128) NOT NULL COMMENT 'ユーザID',
-  `auth_token` VARCHAR(128) NOT NULL COMMENT '認証トークン',
-  `name` VARCHAR(64) NOT NULL COMMENT 'ユーザ名',
-  `high_score` INT UNSIGNED NOT NULL COMMENT 'ハイスコア',
-  `coin` INT UNSIGNED NOT NULL COMMENT '所持コイン',
-  PRIMARY KEY (`id`),
-  INDEX `idx_auth_token` (`auth_token` ASC))
+CREATE TABLE IF NOT EXISTS `todo_db`.`user`
+(
+    `id`           INT AUTO_INCREMENT NOT NULL COMMENT 'id',
+    `name`         VARCHAR(255)       NOT NULL COMMENT 'ユーザ名',
+    `password`     VARCHAR(255)       NOT NULL COMMENT 'パスワード',
+    `auth_token`   VARCHAR(255)       NOT NULL COMMENT '認証トークン',
+    `existence`    INT                NOT NULL COMMENT 'ユーザの存在の有無',
+    PRIMARY KEY (`id`)
+)
 ENGINE = InnoDB
 COMMENT = 'ユーザ';
 
 
 -- -----------------------------------------------------
--- Table `dojo_api`.`collection_item`
+-- Table todo
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dojo_api`.`collection_item` (
-  `id` VARCHAR(128) NOT NULL COMMENT 'コレクションアイテムID',
-  `name` VARCHAR(64) NOT NULL COMMENT 'コレクションアイテム名',
-  `rarity` INT NOT NULL COMMENT 'レアリティ',
-  PRIMARY KEY (`id`))
+CREATE TABLE IF NOT EXISTS `todo_db`.`todo`
+(
+    `id`             INT AUTO_INCREMENT NOT NULL COMMENT 'id',
+    `todo_user_id`   INT                NOT NULL COMMENT 'todoリストを作成したユーザのid',
+    `todo_article`   VARCHAR(255)       NOT NULL COMMENT '内容',
+    `todo_limit`     DATETIME                    COMMENT 'TODOの期限',
+    `todo_tag_id`    INT                NOT NULL COMMENT 'タグ',
+    `todo_complete`  INT                NOT NULL COMMENT '終了したかどうか',
+    `todo_existence` INT                NOT NULL COMMENT '削除したかどうか',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY('todo_user_id')  REFERENCES user('id') ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY('todo_tag_id') REFERENCES tag('id')  ON UPDATE CASCADE ON DELETE CASCADE,
+)
 ENGINE = InnoDB
-COMMENT = 'コレクションアイテム';
+COMMENT = 'ToDo List';
 
 
 -- -----------------------------------------------------
--- Table `dojo_api`.`user_collection_item`
+-- Table tag
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dojo_api`.`user_collection_item` (
-  `user_id` VARCHAR(128) NOT NULL COMMENT 'ユーザID',
-  `collection_item_id` VARCHAR(128) NOT NULL COMMENT 'コレクションアイテムID',
-  PRIMARY KEY (`user_id`, `collection_item_id`),
-  INDEX `fk_user_collection_item_user_idx` (`user_id` ASC),
-  INDEX `fk_user_collection_item_collection_item_idx` (`collection_item_id` ASC),
-  CONSTRAINT `fk_user_collection_item_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `dojo_api`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_user_collection_item_collection_item`
-    FOREIGN KEY (`collection_item_id`)
-    REFERENCES `dojo_api`.`collection_item` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `todo_db`.`tag`
+(
+    `id`   INT          NOT NULL COMMENT 'id',
+    `tag_data` VARCHAR(255) NOT NULL COMMENT '内容',
+    PRIMARY KEY (`id`)
+)
 ENGINE = InnoDB
-COMMENT = 'ユーザ所持コレクションアイテム';
-
-
--- -----------------------------------------------------
--- Table `dojo_api`.`gacha_probability`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dojo_api`.`gacha_probability` (
-  `collection_item_id` VARCHAR(128) NOT NULL COMMENT 'コレクションアイテムID',
-  `ratio` INT UNSIGNED NOT NULL COMMENT '排出重み',
-  INDEX `fk_gacha_probability_collection_item_idx` (`collection_item_id` ASC),
-  PRIMARY KEY (`collection_item_id`),
-  CONSTRAINT `fk_gacha_probability_collection_item_id`
-    FOREIGN KEY (`collection_item_id`)
-    REFERENCES `dojo_api`.`collection_item` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'ガチャ排出情報';
+COMMENT = 'タグ';
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
