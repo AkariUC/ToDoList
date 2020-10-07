@@ -10,6 +10,34 @@
 * ToDoの完了
 * ToDoの削除
 
+
+### MySQLWorkbenchの設定
+MySQLへの接続設定をします。
+1. MySQL Connections の + を選択
+2. 以下のように接続設定を行う
+    ```
+    Connection Name: 任意 (dojo_api等)
+    Connection Method: Standard (TCP/IP)
+    Hostname: 127.0.0.1 (localhost)
+    Port: 3306
+    Username: root
+    Password: ca-tech-dojo
+    Default Schema: dojo_api
+    ```
+
+### API用のデータベースの接続情報を設定する
+環境変数にデータベースの接続情報を設定します。<br>
+ターミナルのセッション毎に設定したり、.bash_profileで設定を行います。
+
+Macの場合
+```
+$ export MYSQL_USER=root \
+    MYSQL_PASSWORD=ca-tech-dojo \
+    MYSQL_HOST=127.0.0.1 \
+    MYSQL_PORT=3306 \
+    MYSQL_DATABASE=dojo_api
+```
+
 ## MYSQL
 [ユーザを作成する理由](https://techacademy.jp/magazine/5110)
 
