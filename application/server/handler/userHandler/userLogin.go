@@ -2,6 +2,7 @@ package userHandler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -35,5 +36,7 @@ func HandleUserLogin() http.HandlerFunc {
 			response.InternalServerError(writer, "Internal Server Error")
 			return
 		}
+
+		fmt.Println(token)
 	}
 }
