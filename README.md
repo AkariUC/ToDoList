@@ -10,19 +10,18 @@
 * ToDoの完了
 * ToDoの削除
 
-
 ### MySQLWorkbenchの設定
 MySQLへの接続設定をします。
 1. MySQL Connections の + を選択
 2. 以下のように接続設定を行う
     ```
-    Connection Name: 任意 (dojo_api等)
+    Connection Name: 任意
     Connection Method: Standard (TCP/IP)
     Hostname: 127.0.0.1 (localhost)
     Port: 3306
-    Username: root
-    Password: ca-tech-dojo
-    Default Schema: dojo_api
+    Username: moriakari
+    Password: pass123
+    Default Schema: todo_db
     ```
 
 ### API用のデータベースの接続情報を設定する
@@ -31,46 +30,44 @@ MySQLへの接続設定をします。
 
 Macの場合
 ```
-$ export MYSQL_USER=root \
-    MYSQL_PASSWORD=ca-tech-dojo \
+$ export MYSQL_USER=moriakari \
+    MYSQL_PASSWORD=pass123 \
     MYSQL_HOST=127.0.0.1 \
     MYSQL_PORT=3306 \
-    MYSQL_DATABASE=dojo_api
+    MYSQL_DATABASE=todo_db
 ```
 
 ## MYSQL
 [ユーザを作成する理由](https://techacademy.jp/magazine/5110)
 
-### 1 rootでMySQLコマンドラインツールの起動  
-$  
-`mysql -u root -p`
+#### 1 rootでMySQLコマンドラインツールの起動  
+$`mysql -u root -p`
 
-### 2 rootで'todo_db'作成
-mysql>  
-`CREATE DATABASE IF NOT EXISTS todo_db;`
+#### 2 rootで'todo_db'作成
+mysql>`CREATE DATABASE IF NOT EXISTS todo_db;`
 
-### 3 rootでユーザー作成
-mysql>  
-`create user 'moriakari'@'localhost' identified by 'pass123';` 
+#### 3 rootでユーザー作成
+mysql>`create user 'moriakari'@'localhost' identified by 'pass123';` 
 
-### 3 rootでユーザーに権限付与
-mysql>  
-```GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO 'moriakari'@'localhost' WITH GRANT OPTION;``` 
+#### 3 rootでユーザーに権限付与
+mysql>```GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO 'moriakari'@'localhost' WITH GRANT OPTION;``` 
 
-### 4 出る
-mysql>  
-`exit`
+#### 4 出る
+mysql>`exit`
 
-### 5 作成したユーザでmysqlに接続する
-$  
-`mysql -u moriakari -p`  
-pass123
+#### 5 作成したユーザでmysqlに接続する
+$`mysql -u moriakari -p`  
+PASS=`pass123`
 
-### 6 打つ!!!
+#### 6 DB、テーブル作成
 ```
 CREATE DATABASE IF NOT EXISTS todo_db;
-USE `todo_db` ;
+```
+```
+USE `todo_db`;
+```
 
+```
 CREATE TABLE IF NOT EXISTS `todo_db`.`user`
 (
     `id`           INT AUTO_INCREMENT NOT NULL COMMENT 'id',
@@ -82,8 +79,28 @@ CREATE TABLE IF NOT EXISTS `todo_db`.`user`
 )
 ENGINE = InnoDB
 COMMENT = 'ユーザ';
+```
 
+```
+CREATE TABLE IF NOT EXISTS `todo_db`.`tag`
+(
+    `id`   INT          NOT NULL COMMENT 'id',
+    `tag_data` VARCHAR(255) NOT NULL COMMENT '内容',
+    PRIMARY KEY (`id`)
+)
+ENGINE = InnoDB
+COMMENT = 'タグ';
+```
 
+```
+INSERT INTO todo_db.tag(id, tag_data) VALUES( 1, '家事');
+INSERT INTO todo_db.tag(id, tag_data) VALUES( 2, '勉強');
+INSERT INTO todo_db.tag(id, tag_data) VALUES( 3, '就活');
+INSERT INTO todo_db.tag(id, tag_data) VALUES( 4, '課題');
+INSERT INTO todo_db.tag(id, tag_data) VALUES( 5, 'その他');
+```
+
+```
 CREATE TABLE IF NOT EXISTS `todo_db`.`todo`
 (
     `id`             INT AUTO_INCREMENT NOT NULL COMMENT 'id',
@@ -99,20 +116,4 @@ CREATE TABLE IF NOT EXISTS `todo_db`.`todo`
 )
 ENGINE = InnoDB
 COMMENT = 'ToDoList';
-
-
-CREATE TABLE IF NOT EXISTS `todo_db`.`tag`
-(
-    `id`   INT          NOT NULL COMMENT 'id',
-    `tag_data` VARCHAR(255) NOT NULL COMMENT '内容',
-    PRIMARY KEY (`id`)
-)
-ENGINE = InnoDB
-COMMENT = 'タグ';
-
-INSERT INTO todo_db.tag(id, tag_data) VALUES( 1, '家事');
-INSERT INTO todo_db.tag(id, tag_data) VALUES( 2, '勉強');
-INSERT INTO todo_db.tag(id, tag_data) VALUES( 3, '就活');
-INSERT INTO todo_db.tag(id, tag_data) VALUES( 4, '課題');
-INSERT INTO todo_db.tag(id, tag_data) VALUES( 5, 'その他');
 ```
