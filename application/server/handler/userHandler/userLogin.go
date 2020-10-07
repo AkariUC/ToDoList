@@ -1,13 +1,12 @@
 package userHandler
 
 import (
-	"ToDoList/application/server/response"
-	"ToDoList/domain/model/userModel"
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"github.com/google/uuid"
+	"ToDoList/application/server/response"
+	"ToDoList/domain/model/userModel"
 )
 
 // todo ログインハンドラ作成
@@ -29,21 +28,8 @@ func HandleUserLogin() http.HandlerFunc {
 			return
 		}
 
-		// UUIDで認証トークンを生成する
-		authToken, err := uuid.NewRandom()
-		if err != nil {
-			log.Println(err)
-			response.InternalServerError(writer, "Internal Server Error")
-			return
-		}
-
-		// データベースにユーザデータを登録する
-		// ユーザデータの登録クエリを入力する
-		err = userModel.SelectUser(&userModel.User{
-			Name:      requestBody.Name,
-			PassWord:  requestBody.PassWord,
-			AuthToken: authToken.String(),
-		})
+		// データベースにユーザデータが存在するか確認する
+		err, token := userModel.SelectUser(requestBody.Name, requestBody.PassWord)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
