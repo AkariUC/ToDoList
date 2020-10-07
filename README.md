@@ -13,27 +13,32 @@
 ## MYSQL
 [ユーザを作成する理由](https://techacademy.jp/magazine/5110)
 
-1 rootでMySQLコマンドラインツールの起動  
-$`mysql -u root -p`
+### 1 rootでMySQLコマンドラインツールの起動  
+$  
+`mysql -u root -p`
 
-2 rootで'todo_db'作成
-mysql>`CREATE DATABASE IF NOT EXISTS todo_db;`
+### 2 rootで'todo_db'作成
+mysql>  
+`CREATE DATABASE IF NOT EXISTS todo_db;`
 
-3 rootでユーザー作成
-mysql>`create user 'moriakari'@'localhost' identified by 'pass123';` 
+### 3 rootでユーザー作成
+mysql>  
+`create user 'moriakari'@'localhost' identified by 'pass123';` 
 
-3 rootでユーザーに権限付与
-mysql>
+### 3 rootでユーザーに権限付与
+mysql>  
 ```GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO 'moriakari'@'localhost' WITH GRANT OPTION;``` 
 
-4 出る
-mysql>`exit`
+### 4 出る
+mysql>  
+`exit`
 
-5 作成したユーザでmysqlに接続する
-$`mysql -u moriakari -p`
+### 5 作成したユーザでmysqlに接続する
+$  
+`mysql -u moriakari -p`  
 pass123
 
-6 打つ!!!
+### 6 打つ!!!
 ```
 CREATE DATABASE IF NOT EXISTS todo_db;
 USE `todo_db` ;
