@@ -2,21 +2,21 @@ package userHandler
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
 	"ToDoList/application/server/response"
+	"ToDoList/constant"
 	"ToDoList/domain/model/userModel"
 )
-
-// todo ログインハンドラ作成
-// todo domain/mode/userModelに ユーザから入力された値を送る
-//  返り値はtokenを返すが、DBから送られてきた形式は、Goではそのまま使えないので(ライブラリを導入すればそのまま使える)そこまででOK
 
 type UserLoginRequest struct {
 	Name     string `json:"name"`
 	PassWord string `json:"password"`
+}
+
+type UserLoginResponse struct {
+	Token string `json:"token"`
 }
 
 func HandleUserLogin() http.HandlerFunc {
@@ -30,15 +30,16 @@ func HandleUserLogin() http.HandlerFunc {
 		}
 
 		// データベースにユーザデータが存在するか確認する
-		// todo 2 ユーザの存在の有無を `constant`に宣言したので、ここで利用してください。(userSignin参考に..)
-		// todo 2 順番
-		err, token := userModel.SelectUser(requestBody.Name, requestBody.PassWord)
+		err, user := userModel.SelectUser(requestBody.Name, requestBody.PassWord, constant.Existence)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
 			return
 		}
 
-		fmt.Println(token)
+		// レスポンス
+		response.Success(writer, &UserLoginResponse{
+			Token: user.AuthToken,
+		})
 	}
 }
