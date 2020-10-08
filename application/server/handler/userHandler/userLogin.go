@@ -30,6 +30,8 @@ func HandleUserLogin() http.HandlerFunc {
 		}
 
 		// データベースにユーザデータが存在するか確認する
+		// todo 2 ユーザの存在の有無を `constant`に宣言したので、ここで利用してください。(userSignin参考に..)
+		// todo 2 順番
 		err, token := userModel.SelectUser(requestBody.Name, requestBody.PassWord)
 		if err != nil {
 			log.Println(err)

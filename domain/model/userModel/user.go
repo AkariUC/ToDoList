@@ -24,7 +24,7 @@ func InsertUser(record *User) error {
 		return err
 	}
 
-	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken ,record.Existence)
+	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken, record.Existence)
 
 	fmt.Println(record.Name)
 	fmt.Println(record.PassWord)
@@ -36,6 +36,8 @@ func InsertUser(record *User) error {
 
 // todo ログイン時にユーザから送られてきたデータをもとに、DBのユーザを探し、トークンを返す
 func SelectUser(name, password string) (error, *string) {
+	// todo 2 existence = 1 は良くないので `constant` を活用
+	// todo 2 SELECT 文の `?` が どこにも定義されていないので WHEREが死んでいる
 	row := db.Conn.QueryRow("SELECT auth_token FROM user WHERE id = ? AND name = ? AND password = ? AND existence = 1")
 
 	user := User{}
@@ -49,5 +51,3 @@ func SelectUser(name, password string) (error, *string) {
 	}
 	return nil, &user.AuthToken
 }
-
-// todo 変換
