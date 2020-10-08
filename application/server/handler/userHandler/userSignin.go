@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"ToDoList/application/server/response"
+	"ToDoList/constant"
 	"ToDoList/domain/model/userModel"
 )
 
@@ -41,6 +42,7 @@ func HandleUserSignin() http.HandlerFunc {
 			Name:      requestBody.Name,
 			PassWord:  requestBody.PassWord,
 			AuthToken: authToken.String(),
+			Existence: constant.Existence,
 		})
 		if err != nil {
 			log.Println(err)
