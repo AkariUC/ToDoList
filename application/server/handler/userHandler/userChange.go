@@ -1,11 +1,12 @@
 package userHandler
 
 import (
-	"ToDoList/application/server/response"
-	"ToDoList/domain/model/userModel"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"ToDoList/application/server/response"
+	"ToDoList/domain/model/userModel"
 )
 
 type UserChangeRequest struct {
