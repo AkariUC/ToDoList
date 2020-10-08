@@ -11,7 +11,6 @@ import (
 func Serve(addr string) {
 
 	http.HandleFunc("/user/signin", post(userHandler.HandleUserSignin()))
-	// todo Loginハンドラを呼び出す(スワッガーを参考に)
 	http.HandleFunc("/user/login", post(userHandler.HandleUserLogin()))
 
 	/* ===== サーバの起動 ===== */
