@@ -2,7 +2,6 @@ package userModel
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -23,19 +22,12 @@ func InsertUser(record *User) error {
 	if err != nil {
 		return err
 	}
-
 	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken, record.Existence)
-
-	fmt.Println(record.Name)
-	fmt.Println(record.PassWord)
-	fmt.Println(record.AuthToken)
-	fmt.Println(record.Existence)
-
 	return err
 }
 
-// todo ログイン時にユーザから送られてきたデータをもとに、DBのユーザを探し、トークンを返す
-func SelectUser(name string, password string, existence int) (error, *User) {
+// SelectUser ユーザを取得
+func SelectUser(name, password string, existence int) (error, *User) {
 	row := db.Conn.QueryRow("SELECT auth_token FROM user WHERE name = ? AND password = ? AND existence = ?", name, password, existence)
 
 	user := User{}
@@ -48,4 +40,24 @@ func SelectUser(name string, password string, existence int) (error, *User) {
 		return err, nil
 	}
 	return nil, &user
+}
+
+// UpdateUserName ユーザの名前を変更
+func UpdateUserName(name, newName, password string) error {
+	_, err := db.Conn.Exec("UPDATE user SET name = ? WHERE name = ? AND password = ?", newName, name, password)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
+// UpdateUserExistence ユーザの存在の有無
+func UpdateUserExistence(name, password string) error {
+	_, err := db.Conn.Exec("UPDATE user SET existence = ? WHERE name = ? AND password = ?", 0, name, password)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
