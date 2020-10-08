@@ -2,6 +2,7 @@ package userModel
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -13,16 +14,23 @@ type User struct {
 	Name      string
 	PassWord  string
 	AuthToken string
+	Existence int32
 }
 
 // InsertUser データベースをレコードを登録する
 func InsertUser(record *User) error {
-	stmt, err := db.Conn.Prepare("INSERT INTO user (name, password, auth_token) VALUES (?, ?, ?); ")
+	stmt, err := db.Conn.Prepare("INSERT INTO user (name, password, auth_token, existence) VALUES (?, ?, ?, ?); ")
 	if err != nil {
 		return err
 	}
 
-	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken)
+	_, err = stmt.Exec(record.Name, record.PassWord, record.AuthToken ,record.Existence)
+
+	fmt.Println(record.Name)
+	fmt.Println(record.PassWord)
+	fmt.Println(record.AuthToken)
+	fmt.Println(record.Existence)
+
 	return err
 }
 
