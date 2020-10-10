@@ -10,6 +10,7 @@ import (
 )
 
 type User struct {
+	ID        int64
 	Name      string
 	PassWord  string
 	AuthToken string
@@ -32,6 +33,22 @@ func SelectUser(name, password string, existence int) (error, *User) {
 
 	user := User{}
 	err := row.Scan(&user.AuthToken)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		log.Println(err)
+		return err, nil
+	}
+	return nil, &user
+}
+
+// SelectUserData トークンからユーザを取得
+func SelectUserData(token string) (error, *User) {
+	row := db.Conn.QueryRow("SELECT id, name, password, auth_token, existence FROM user WHERE auth_token = ?", token)
+
+	user := User{}
+	err := row.Scan(&user.ID, &user.Name, &user.PassWord, &user.AuthToken, &user.Existence)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil

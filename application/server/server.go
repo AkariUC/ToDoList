@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"ToDoList/application/server/handler/todoHandler"
 	"ToDoList/application/server/handler/userHandler"
 )
 
@@ -14,6 +15,7 @@ func Serve(addr string) {
 	http.HandleFunc("/user/login", post(userHandler.HandleUserLogin()))
 	http.HandleFunc("/user/change", post(userHandler.HandleUserChange()))
 	http.HandleFunc("/user/delete", post(userHandler.HandleUserDelete()))
+	http.HandleFunc("/todo/add", post(todoHandler.HandleTodoRegistration()))
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")
