@@ -16,6 +16,7 @@ func Serve(addr string) {
 	http.HandleFunc("/user/change", post(userHandler.HandleUserChange()))
 	http.HandleFunc("/user/delete", post(userHandler.HandleUserDelete()))
 	http.HandleFunc("/todo/add", post(todoHandler.HandleTodoRegistration()))
+	http.HandleFunc("/todo/delete", post(todoHandler.HandleTodoDelete()))
 
 	/* ===== サーバの起動 ===== */
 	log.Println("Server running...")

@@ -42,7 +42,7 @@ func HandleUserSignin() http.HandlerFunc {
 			Name:      requestBody.Name,
 			PassWord:  requestBody.PassWord,
 			AuthToken: authToken.String(),
-			Existence: constant.Existence,
+			Existence: constant.ExistenceFull,
 		})
 		if err != nil {
 			log.Println(err)
