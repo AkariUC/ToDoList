@@ -30,13 +30,23 @@ func HandleTodoRegistration() http.HandlerFunc {
 
 		// リクエストヘッダからauth_tokenを取得
 		token := request.Header.Get("x-token")
-		_, user := userModel.SelectUserData(token)
+		err, user := userModel.SelectUserData(token)
+		if err != nil {
+			log.Println(err)
+			response.InternalServerError(writer, "Internal Server Error")
+			return
+		}
 
 		// tagデータを取得
-		_, tag := tagModel.SelectTag(requestBody.TodoTagID)
+		err, tag := tagModel.SelectTag(requestBody.TodoTagID)
+		if err != nil {
+			log.Println(err)
+			response.InternalServerError(writer, "Internal Server Error")
+			return
+		}
 
 		// データベースにTodoデータを登録する
-		err := todoModel.InsertTodo(&todoModel.Todo{
+		err = todoModel.InsertTodo(&todoModel.Todo{
 			TodoUserId:  user.ID,
 			TodoArticle: requestBody.TodoArticle,
 			TodoLimit:   requestBody.TodoLimit,
