@@ -1,17 +1,20 @@
 package todoModel
 
 import (
+	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 
-	"ToDoList/constant"
 	"ToDoList/infrastructure/db"
 )
 
 type Todo struct {
-	TodoUserId  int64
-	TodoArticle string
-	TodoLimit   string
-	TodoTagId   int64
+	TodoUserId    int64
+	TodoArticle   string
+	TodoLimit     string
+	TodoTagId     int64
+	TodoComplete  int
+	TodoExistence int
 }
 
 // InsertTodo データベースをレコードを登録する
@@ -20,6 +23,16 @@ func InsertTodo(record *Todo) error {
 	if err != nil {
 		return err
 	}
-	_, err = stmt.Exec(record.TodoUserId, record.TodoArticle, record.TodoLimit, record.TodoTagId, constant.Complete, constant.Existence)
+	_, err = stmt.Exec(record.TodoUserId, record.TodoArticle, record.TodoLimit, record.TodoTagId, record.TodoComplete, record.TodoExistence)
 	return err
+}
+
+// UpdateTodoExistence Todoの存在を削除する
+func UpdateTodoExistence(existenceNull, id int) error {
+	_, err := db.Conn.Exec("UPDATE todo SET todo_existence = ? WHERE id = ?", existenceNull, id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }

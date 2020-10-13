@@ -70,8 +70,8 @@ func UpdateUserName(name, newName, password string) error {
 }
 
 // UpdateUserExistence ユーザの存在の有無
-func UpdateUserExistence(name, password string) error {
-	_, err := db.Conn.Exec("UPDATE user SET existence = ? WHERE name = ? AND password = ?", 0, name, password)
+func UpdateUserExistence(name, password string, existenceNull int) error {
+	_, err := db.Conn.Exec("UPDATE user SET existence = ? WHERE name = ? AND password = ?", existenceNull, name, password)
 	if err != nil {
 		log.Println(err)
 		return err
