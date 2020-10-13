@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"ToDoList/application/server/response"
+	"ToDoList/constant"
 	"ToDoList/domain/model/tagModel"
 	"ToDoList/domain/model/todoModel"
 	"ToDoList/domain/model/userModel"
@@ -46,12 +47,16 @@ func HandleTodoRegistration() http.HandlerFunc {
 		}
 
 		// データベースにTodoデータを登録する
-		err = todoModel.InsertTodo(&todoModel.Todo{
-			TodoUserId:  user.ID,
-			TodoArticle: requestBody.TodoArticle,
-			TodoLimit:   requestBody.TodoLimit,
-			TodoTagId:   tag.ID,
-		})
+		err = todoModel.InsertTodo(
+			&todoModel.Todo{
+				TodoUserId:    user.ID,
+				TodoArticle:   requestBody.TodoArticle,
+				TodoLimit:     requestBody.TodoLimit,
+				TodoTagId:     tag.ID,
+				TodoComplete:  constant.CompleteNot,
+				TodoExistence: constant.ExistenceFull,
+			},
+		)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")

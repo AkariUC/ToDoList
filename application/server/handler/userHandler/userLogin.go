@@ -30,7 +30,7 @@ func HandleUserLogin() http.HandlerFunc {
 		}
 
 		// データベースにユーザデータが存在するか確認する
-		err, user := userModel.SelectUser(requestBody.Name, requestBody.PassWord, constant.Existence)
+		err, user := userModel.SelectUser(requestBody.Name, requestBody.PassWord, constant.ExistenceFull)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
