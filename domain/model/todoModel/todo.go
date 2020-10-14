@@ -78,3 +78,12 @@ func SelectTodoTag(id int64, tagID, existenceFull int) (*TodoArray, error) {
 	}
 	return &todoList, nil
 }
+
+func UpdateTodoComplete(id, complete int) error {
+	_, err := db.Conn.Exec("UPDATE todo SET todo_complete = ? WHERE id = ?", complete, id)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
