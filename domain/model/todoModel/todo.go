@@ -17,6 +17,8 @@ type Todo struct {
 	TodoExistence int
 }
 
+type TodoArray []*Todo
+
 // InsertTodo データベースをレコードを登録する
 func InsertTodo(record *Todo) error {
 	stmt, err := db.Conn.Prepare("INSERT INTO todo (todo_user_id, todo_article, todo_limit, todo_tag_id, todo_complete, todo_existence) VALUES (?, ?, ?, ?, ?, ?); ")
@@ -35,4 +37,24 @@ func UpdateTodoExistence(existenceNull, id int) error {
 		return err
 	}
 	return nil
+}
+
+// SelectTodoList ユーザのIDからTodoのリストを取得する
+func SelectTodoList(id int64, existenceFull int) (*TodoArray, error) {
+	rows, err := db.Conn.Query("SELECT id, todo_article, todo_limit, todo_tag_id, todo_complete, todo_existence FROM todo WHERE todo_user_id = ? AND todo_existence = ?", id, existenceFull)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	var todoList TodoArray
+	for rows.Next() {
+		var todo Todo
+		if err := rows.Scan(&todo.TodoUserId, &todo.TodoArticle, &todo.TodoLimit, &todo.TodoTagId, &todo.TodoComplete, &todo.TodoExistence); err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		todoList = append(todoList, &todo)
+	}
+	return &todoList, nil
 }
