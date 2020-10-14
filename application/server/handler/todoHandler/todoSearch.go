@@ -1,6 +1,7 @@
 package todoHandler
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
@@ -10,21 +11,22 @@ import (
 	"ToDoList/domain/model/userModel"
 )
 
-type TodoListResponse struct {
-	TodoList []TodoList `json:"todo_list"`
+type TodoSearchRequest struct {
+	TodoTagID int `json:"todo_tag_id"`
 }
 
-type TodoList struct {
-	TodoArticle   string `json:"todo_article"`
-	TodoLimit     string `json:"todo_limit"`
-	TodoTagID     int64  `json:"todo_tag_id"`
-	TodoComplete  int    `json:"todo_complete"`
-	TodoExistence int    `json:"todo_existence"`
-}
-
-func HandleTodoGetList() http.HandlerFunc {
+func HandleTodoSearch() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		// リクエストヘッダからauth_tokenを取得
+
+		// リクエストBodyから更新後情報を取得
+		var requestBody TodoSearchRequest
+		if err := json.NewDecoder(request.Body).Decode(&requestBody); err != nil {
+			log.Println(err)
+			response.InternalServerError(writer, "Internal Server Error")
+			return
+		}
+
+		// リクエストヘッダからuserを取得
 		token := request.Header.Get("x-token")
 		err, user := userModel.SelectUserData(token)
 		if err != nil {
@@ -33,8 +35,8 @@ func HandleTodoGetList() http.HandlerFunc {
 			return
 		}
 
-		// データベースから指定したユーザのTodoを取得
-		todoArray, err := todoModel.SelectTodoList(user.ID, constant.ExistenceFull)
+		// データベースから指定したユーザ，タグIDのTodoを取得
+		todoArray, err := todoModel.SelectTodoTag(user.ID, requestBody.TodoTagID, constant.ExistenceFull)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
