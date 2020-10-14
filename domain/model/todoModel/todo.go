@@ -58,3 +58,23 @@ func SelectTodoList(id int64, existenceFull int) (*TodoArray, error) {
 	}
 	return &todoList, nil
 }
+
+// ユーザから送られたtag idを用いて，指定したタグのみを返す
+func SelectTodoTag(id int64, tagID, existenceFull int) (*TodoArray, error) {
+	rows, err := db.Conn.Query("SELECT id, todo_article, todo_limit, todo_tag_id, todo_complete, todo_existence FROM todo WHERE todo_user_id = ? AND todo_tag_id = ? AND todo_existence = ?", id, tagID, existenceFull)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	var todoList TodoArray
+	for rows.Next() {
+		var todo Todo
+		if err := rows.Scan(&todo.TodoUserId, &todo.TodoArticle, &todo.TodoLimit, &todo.TodoTagId, &todo.TodoComplete, &todo.TodoExistence); err != nil {
+			log.Println(err)
+			return nil, err
+		}
+		todoList = append(todoList, &todo)
+	}
+	return &todoList, nil
+}
