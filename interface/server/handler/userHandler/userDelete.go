@@ -1,32 +1,37 @@
-package todoHandler
+package userHandler
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"ToDoList/application/server/response"
 	"ToDoList/constant"
-	"ToDoList/domain/model/todoModel"
+	"ToDoList/infrastructure/model/userModel"
+	"ToDoList/interface/server/response"
 )
 
-type TodoCompleteRequest struct {
-	ID int `json:"id"`
+type UserDeleteRequest struct {
+	Name     string `json:"name"`
+	PassWord string `json:"password"`
 }
 
-func HandleTodoComplete() http.HandlerFunc {
+func HandleUserDelete() http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
 
 		// リクエストBodyから更新後情報を取得
-		var requestBody TodoCompleteRequest
+		var requestBody UserSigninRequest
 		if err := json.NewDecoder(request.Body).Decode(&requestBody); err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")
 			return
 		}
 
-		// データベースから指定したユーザ，タグIDのTodoを取得
-		err := todoModel.UpdateTodoComplete(requestBody.ID, constant.Complete)
+		// ユーザデータを検索する
+		err := userModel.UpdateUserExistence(
+			requestBody.Name,
+			requestBody.PassWord,
+			constant.ExistenceNull,
+		)
 		if err != nil {
 			log.Println(err)
 			response.InternalServerError(writer, "Internal Server Error")

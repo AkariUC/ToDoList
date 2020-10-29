@@ -1,9 +1,8 @@
 package main
 
 import (
+	"ToDoList/cmd/api"
 	"flag"
-
-	"ToDoList/application/server"
 )
 
 var (
@@ -17,6 +16,5 @@ func init() {
 }
 
 func main() {
-	server.Serve(addr)
+	api.Serve(addr)
 }
-

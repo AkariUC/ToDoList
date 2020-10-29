@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"ToDoList/application/server/response"
 	"ToDoList/constant"
-	"ToDoList/domain/model/tagModel"
-	"ToDoList/domain/model/todoModel"
-	"ToDoList/domain/model/userModel"
+	"ToDoList/infrastructure/model/tagModel"
+	"ToDoList/infrastructure/model/todoModel"
+	"ToDoList/infrastructure/model/userModel"
+	"ToDoList/interface/server/response"
 )
 
 type TodoRegistrationRequest struct {
