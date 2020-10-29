@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"ToDoList/application/server/response"
 	"ToDoList/constant"
-	"ToDoList/domain/model/todoModel"
+	"ToDoList/infrastructure/model/todoModel"
+	"ToDoList/interface/server/response"
 )
 
 type TodoDeleteRequest struct {

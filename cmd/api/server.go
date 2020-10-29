@@ -1,11 +1,11 @@
-package server
+package api
 
 import (
 	"log"
 	"net/http"
 
-	"ToDoList/application/server/handler/todoHandler"
-	"ToDoList/application/server/handler/userHandler"
+	"ToDoList/interface/server/handler/todoHandler"
+	"ToDoList/interface/server/handler/userHandler"
 )
 
 // Serve HTTPサーバを起動する
@@ -59,7 +59,7 @@ func httpMethod(apiFunc http.HandlerFunc, method string) http.HandlerFunc {
 		}
 
 		// 共通のレスポンスヘッダを設定
-		writer.Header().Add("Content-Type", "application/json")
+		writer.Header().Add("Content-Type", "interface/json")
 		apiFunc(writer, request)
 	}
 }

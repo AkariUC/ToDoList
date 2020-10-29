@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"ToDoList/application/server/response"
 	"ToDoList/constant"
-	"ToDoList/domain/model/userModel"
+	"ToDoList/infrastructure/model/userModel"
+	"ToDoList/interface/server/response"
 )
 
 type UserLoginRequest struct {

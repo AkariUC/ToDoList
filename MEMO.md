@@ -1,22 +1,31 @@
 # 後から振り替えれるためのメモ
 
 ## 開発
-* ファイル構成
-https://qiita.com/hmarf/items/7f4d39c48775c205b99b
 
+### レイアードアーキテクチャ
+Interfaces層  
+↓  
+usecase層  
+↓  
+domain層  
+↓  
+infrastructure層  
 
-├── application    // Request、Responseを行うだけ  
-│   └── server  
-│       ├── handler  
-│       ├── response  
-│       └── server.go  
-├── domain         // データを加工する。必要とあらば infra を通じてDB情報を使う  
-│   ├── model      // structの塊  
-│   ├── repository // Interfaceの塊（あとで説明します）  
-│   └── service    // 処理をごちゃごちゃ書くこところ  
-├── infrastructure // DBと通信する  
-└── cmd  
-    └── main.go  
+### DDD
+Interfaces層  
+↓  
+usecase層  
+↓  
+domain層  
+↑  
+infrastructure層
+
+### ディレクトリ構成
+レイヤードアーキテクチャの層は本来は一番上から、
+Presentation → Application → Domain → Infrastructure
+という名前が付いていますが責務のイメージが浮かびずらいと思うので今回は
+Interfaces → Usecase → Domain → Infrastructure
+という名前で進めさせていただきます。
 
 
 ## その他
